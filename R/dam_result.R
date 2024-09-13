@@ -270,7 +270,7 @@ dam_res_ui <- function(id) {
 }
 
 
-#' Compound annotation
+#' DAM analysis
 #' The application server-side
 #'
 #' @param input,output,session Internal parameters for {shiny}.
