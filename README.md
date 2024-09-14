@@ -2,6 +2,14 @@
 
 [![R version](https://img.shields.io/badge/R-v4.3.3-salmon)](https://www.r-project.org) [![TBtools version](https://img.shields.io/badge/TBtools-%3Ev2.096-greenyellow)](https://www.yuque.com/cjchen/hirv8i/fzc4g9) ![lifecycle](https://img.shields.io/badge/lifecycle-Experimental-lightcyan) [![license](https://img.shields.io/badge/license-MIT-red)](https://opensource.org/licenses/MIT) [![Myblog](https://img.shields.io/badge/Blog-ShanwLearnBioinfo-purple)](https://shawnwx2019.github.io/)
 
+# TODO list
+
+- [ ] Download module. pdf format. before Oct 07, 2024
+
+- [ ] TBtools plugin test. before Oct 07, 2024
+
+- [ ] Semi-annotation.
+
 # Cookbook
 
 MetMiner cookbook: [https://shawnwx2019.github.io/metminer-cookbook/](https://shawnwx2019.github.io/metminer-cookbook/)
@@ -64,8 +72,6 @@ You can download demo file at:
  - [Demo files - Google drive ](https://drive.google.com/drive/folders/1H9hJBEyy4Eu6egq8oS_zdn9scLYyXf6R?usp=drive_link)   
  
  - [Demo files - 百度网盘](https://pan.baidu.com/s/1OSi8LJpphvvFqV3E9MVxEQ?pwd=pn7k)
-
- 链接: https://pan.baidu.com/s/1OSi8LJpphvvFqV3E9MVxEQ?pwd=pn7k 提取码: pn7k 
 
 # Citation
 

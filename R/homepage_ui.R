@@ -72,10 +72,10 @@ homepage_ui <- function(id) {
             "<hr style='border-top: 6px double #008080; border-bottom: 3px solid #008080;'>",
             "<p>If you have used this app for metabolomics analysis in your publication, please cite the following papers:</p>",
             "<ul>",
-            "<li>MetMiner: A user-friendly pipeline for large-scale plant metabolomics data</li>",
-            "<li>TidyMass: Shen X, et al. (2022). TidyMass an object-oriented reproducible analysis framework for LC-MS data. Nat Commun. 13(1):4365. <a href='https://www.nature.com/articles/s41467-022-32155-w' target='_blank'>doi:10.1038/s41467-022-32155-w.</a></li>",
+            "<li>MetMiner: Wang X, Liang S, Yang W, Yu K, Liang F, Zhao B, Zhu X, Zhou C, Mur LAJ, Roberts JA, Zhang J, Zhang X (2024) MetMiner: A user-friendly pipeline for large-scale plant metabolomics data analysis. J Integr Plant Biol: <a href='https://onlinelibrary.wiley.com/doi/10.1111/jipb.13774' target='_blank'>doi:10.1111/jipb.13774.</a></li>",
+            "<li>TidyMass: Shen XT, Yan H, Wang CC, Gao P, Johnson CH, Snyder MP (2022) TidyMass an object-oriented reproducible analysis framework for LC-MS data. Nat Commun 13:4365. <a href='https://www.nature.com/articles/s41467-022-32155-w' target='_blank'>doi:10.1038/s41467-022-32155-w.</a></li>",
             "<p>If you installed metMiner from TBtools plugin store, please cite:</p>",
-            "<li>TBtools: Chen, et al. (2023). TBtools-II: 'A one for all, all for one' bioinformatics platform for biological big-data mining. Molecular Plant 16(11): 1733-1742. <a href='10.1016/j.molp.2023.09.010' target='_blank'>doi:10.1016/j.molp.2023.09.010</a></li>",
+            "<li>TBtools: Chen C, Wu Y, Li J, Wang X, Zeng Z, Xu J, Liu Y, Feng J, Chen H, He Y (2023) TBtools-II: A “one for all, all for one” bioinformatics platform for biological big-data mining. Molecular plant 16: 1733-1742. <a href='10.1016/j.molp.2023.09.010' target='_blank'>doi:10.1016/j.molp.2023.09.010</a></li>",
             "</ul>",
             "<p>Thank you!</p>"
           )
@@ -85,8 +85,8 @@ homepage_ui <- function(id) {
           paste(
             "<h2>Reference</h2>",
             "<hr style='border-top: 6px double #008080; border-bottom: 3px solid #008080;'>",
-            "<p><sup>1</sup>TidyMass: Shen X, et al. (2022). TidyMass an object-oriented reproducible analysis framework for LC-MS data. Nat Commun. 13(1):4365. <a href='https://www.nature.com/articles/s41467-022-32155-w' target='_blank'>doi:10.1038/s41467-022-32155-w.</a></p>",
-            "<p><sup>2</sup>TBtools: Chen, et al. (2023). TBtools-II: 'A one for all, all for one' bioinformatics platform for biological big-data mining. Molecular Plant 16(11): 1733-1742. <a href='10.1016/j.molp.2023.09.010' target='_blank'>doi:10.1016/j.molp.2023.09.010</a></p>"
+            "<p><sup>1</sup>TidyMass: Shen XT, Yan H, Wang CC, Gao P, Johnson CH, Snyder MP (2022) TidyMass an object-oriented reproducible analysis framework for LC-MS data. Nat Commun 13:4365. <a href='https://www.nature.com/articles/s41467-022-32155-w' target='_blank'>doi:10.1038/s41467-022-32155-w.</a></p>",
+            "<p><sup>2</sup>Chen C, Wu Y, Li J, Wang X, Zeng Z, Xu J, Liu Y, Feng J, Chen H, He Y (2023) TBtools-II: A “one for all, all for one” bioinformatics platform for biological big-data mining. Molecular plant 16: 1733-1742 <a href='10.1016/j.molp.2023.09.010' target='_blank'>doi:10.1016/j.molp.2023.09.010</a></p>"
 
           )
         ),

@@ -51,7 +51,7 @@ data_overview_ui <- function(id) {
       ),# div
       #### MainPanel ========
       mainPanel(
-         (
+        fluidPage(
           actionButton(ns('toggleSidebar'),"Toggle sidebar"),
           actionButton(inputId = ns('data_clean_start'),label = "Start",icon = icon("play")),
           actionButton(inputId = ns('data_clean_reupload_si'),"Update sample information",icon = icon("angles-up")),
