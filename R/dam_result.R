@@ -298,7 +298,7 @@ dam_res_ui <- function(id) {
 #' @noRd
 
 
-dam_res_server <- function(id,volumes,prj_init,data_clean_rv) {
+dam_res_server <- function(id,volumes,prj_init,data_clean_rv,data_download) {
   moduleServer(id, function(input, output, session) {
 
     ns <- session$ns
@@ -313,7 +313,7 @@ dam_res_server <- function(id,volumes,prj_init,data_clean_rv) {
       input$dam_initialize,
       {
         if(!is.null(prj_init$object_positive.init) & prj_init$steps == "DAM and rest"){
-          p3_DAM$object_merge= prj_init$object_positive.init;
+          p3_DAM$object_merge = prj_init$object_positive.init;
         } else {
           if(is.null(data_clean_rv$object_merge)){return()}
           p3_DAM$object_merge = data_clean_rv$object_merge
@@ -664,7 +664,6 @@ dam_res_server <- function(id,volumes,prj_init,data_clean_rv) {
 
 
 # voc plot ----------------------------------------------------------------
-
 
     observeEvent(input$dam_voc_show,{
       output$dam_voc_plot <- renderUI({

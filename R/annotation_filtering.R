@@ -196,7 +196,7 @@ annotation_filter_ui <- function(id) {
 #' @noRd
 
 
-annotation_filter_server <- function(id,volumes,prj_init,data_clean_rv) {
+annotation_filter_server <- function(id,volumes,prj_init,data_clean_rv,data_download) {
   moduleServer(id, function(input, output, session) {
     observeEvent(input$toggleSidebar, {
       shinyjs::toggle(id = "Sidebar")

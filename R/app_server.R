@@ -24,21 +24,24 @@ app_server <- function(input, output, session) {
     id = "data_import_raw_id",
     volumes = volumes,
     prj_init = prj_init,
-    data_import_rv = data_import_rv
+    data_import_rv = data_import_rv,
+    data_download = download
   )
   ##> from peak picking table
   data_import_tbl_server(
     id = "data_import_tbl_id",
     volumes = volumes,
     prj_init = prj_init,
-    data_import_rv = data_import_rv
+    data_import_rv = data_import_rv,
+    data_download = download
   )
   ##> from mass_dataset
   data_import_massdataset_server(
     id = "data_import_massdataset_id",
     volumes = volumes,
     prj_init = prj_init,
-    data_import_rv = data_import_rv
+    data_import_rv = data_import_rv,
+    data_download = download
   )
   #> Data clean
   data_clean_rv <- reactiveValues(data = NULL)
@@ -47,35 +50,40 @@ app_server <- function(input, output, session) {
     volumes = volumes,
     prj_init = prj_init,
     data_import_rv = data_import_rv,
-    data_clean_rv = data_clean_rv
+    data_clean_rv = data_clean_rv,
+    data_download = download
   )
   ##> remove noise
   data_rm_noise_server(
     id = "data_rm_noise_id",
     volumes = volumes,
     prj_init = prj_init,
-    data_clean_rv = data_clean_rv
+    data_clean_rv = data_clean_rv,
+    data_download = download
   )
   ##> detected outlier
   data_rm_outlier_server(
     id = "data_rm_outlier_id",
     volumes = volumes,
     prj_init = prj_init,
-    data_clean_rv = data_clean_rv
+    data_clean_rv = data_clean_rv,
+    data_download = download
   )
   ##> missing value imputation
   data_mv_impute_server(
     id = "data_mv_impute_id",
     volumes = volumes,
     prj_init = prj_init,
-    data_clean_rv = data_clean_rv
+    data_clean_rv = data_clean_rv,
+    data_download = download
   )
   ##> data normalization
   data_normalize_server(
     id = "data_normalize_id",
     volumes = volumes,
     prj_init = prj_init,
-    data_clean_rv = data_clean_rv
+    data_clean_rv = data_clean_rv,
+    data_download = download
   )
   #> annotation server
   ##> annotation
@@ -83,14 +91,16 @@ app_server <- function(input, output, session) {
     id = "annotation_id",
     volumes = volumes,
     prj_init = prj_init,
-    data_clean_rv = data_clean_rv
+    data_clean_rv = data_clean_rv,
+    data_download = download
   )
   ##> annotation filter
   annotation_filter_server(
     id = "annotation_filter_id",
     volumes = volumes,
     prj_init = prj_init,
-    data_clean_rv = data_clean_rv
+    data_clean_rv = data_clean_rv,
+    data_download = download
   )
   ##> data merge
   ##> annotation filter
@@ -98,7 +108,8 @@ app_server <- function(input, output, session) {
     id = "data_merge_id",
     volumes = volumes,
     prj_init = prj_init,
-    data_clean_rv = data_clean_rv
+    data_clean_rv = data_clean_rv,
+    data_download = download
   )
   #> metabolite marker picking
   ##> DAM analysis
@@ -106,21 +117,24 @@ app_server <- function(input, output, session) {
     id = "data_class_id",
     volumes = volumes,
     prj_init = prj_init,
-    data_clean_rv = data_clean_rv
+    data_clean_rv = data_clean_rv,
+    data_download = download
   )
   ##> DAM analysis
   dam_res_server(
     id = "dam_res_id",
     volumes = volumes,
     prj_init = prj_init,
-    data_clean_rv = data_clean_rv
+    data_clean_rv = data_clean_rv,
+    data_download = download
   )
   ##> DAM analysis
   data_enrich_server(
     id = "data_enrich_id",
     volumes = volumes,
     prj_init = prj_init,
-    data_clean_rv = data_clean_rv
+    data_clean_rv = data_clean_rv,
+    data_download = download
   )
 
 
