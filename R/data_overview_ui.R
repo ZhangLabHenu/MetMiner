@@ -61,7 +61,7 @@ data_overview_ui <- function(id) {
             tabPanel(
               title = 'Positive',height = '500px',width = "100%",
               icon = icon('plus'),
-              tags$h3("Feature accumulation profile of QC samples",style = 'color: #008080'),
+              tags$h3("",style = 'color: #008080'),
               hr_main(),
               jqui_resizable(
                 uiOutput(ns("data_clean_batch_plt.pos"),fill = T)
@@ -146,7 +146,8 @@ data_overview_ui <- function(id) {
 #' @noRd
 
 
-data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_rv) {
+data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_rv,
+                                 downloads) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     observeEvent(input$toggleSidebar, {
@@ -245,6 +246,26 @@ data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_r
           QC_boxplot(object = p2_dataclean$object_pos,colby = p2_dataclean$color_key_batch,type = 'plotly')
         })
 
+        #> download pos
+        observeEvent(
+          input$adjust4.1.1,
+          {
+            downloads$width4.1.1 <- as.numeric(input$width4.1.1)
+            downloads$height4.1.1 <-  as.numeric(input$height4.1.1)
+          }
+        )
+        output$downfig4.1.1 = downloadHandler(
+          filename = function() {
+            "4.1.1_check_batch_pos.pdf"
+          },
+          content = function(file) {
+            ggsave(plot = QC_boxplot(object = p2_dataclean$object_pos,colby = p2_dataclean$color_key_batch,type = 'plot'),
+                   filename = file,
+                   width = downloads$width4.1.1,
+                   height = downloads$height4.1.1)
+          }
+        )
+
         #> plot.neg
         output$data_clean_batch_plt.neg <- renderUI({
           plot_type <- input$data_clean_plt_format
@@ -268,6 +289,26 @@ data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_r
           QC_boxplot(object = p2_dataclean$object_neg,colby = p2_dataclean$color_key_batch,type = 'plotly')
         })
 
+        #> download neg
+        observeEvent(
+          input$adjust4.1.2,
+          {
+            downloads$width4.1.2 <- as.numeric(input$width4.1.2)
+            downloads$height4.1.2 <-  as.numeric(input$height4.1.2)
+          }
+        )
+        output$downfig4.1.2 = downloadHandler(
+          filename = function() {
+            "4.1.2_check_batch_neg.pdf"
+          },
+          content = function(file) {
+            ggsave(plot = QC_boxplot(object = p2_dataclean$object_neg,colby = p2_dataclean$color_key_batch,type = 'plot'),
+                   filename = file,
+                   width = downloads$width4.1.2,
+                   height = downloads$height4.1.2)
+          }
+        )
+        ##> MV plots
         #> plot.pos
         output$data_clean_mv_plt.pos <- renderUI({
           plot_type <- input$data_clean_plt_format
@@ -288,8 +329,28 @@ data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_r
         output$plotly_plot_checkmv.pos <- renderPlotly({
           if(is.null(input$data_clean_start)){return()}
           if(is.null(p2_dataclean$object_pos)){return()}
-          check_mv(object = p2_dataclean$object_pos,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plotly')
+          check_mv(object = p2_dataclean$object_pos,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot')
         })
+
+        #> download pos
+        observeEvent(
+          input$adjust4.1.3.1,
+          {
+            downloads$width4.1.3.1 <- as.numeric(input$width4.1.3.1)
+            downloads$height4.1.3.1 <-  as.numeric(input$height4.1.3.1)
+          }
+        )
+        output$downfig4.1.3.1 = downloadHandler(
+          filename = function() {
+            "4.1.3.1_check_mv_pos.pdf"
+          },
+          content = function(file) {
+            ggsave(plot = check_mv(object = p2_dataclean$object_pos,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot'),
+                   filename = file,
+                   width = downloads$width4.1.3.1,
+                   height = downloads$height4.1.3.1)
+          }
+        )
 
         #> plot.neg
         output$data_clean_mv_plt.neg <- renderUI({
@@ -313,6 +374,25 @@ data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_r
           if(is.null(p2_dataclean$object_neg)){return()}
           check_mv(object = p2_dataclean$object_neg,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plotly')
         })
+        #> download neg
+        observeEvent(
+          input$adjust4.1.3,
+          {
+            downloads$width4.1.3 <- as.numeric(input$width4.1.3)
+            downloads$height4.1.3 <-  as.numeric(input$height4.1.3)
+          }
+        )
+        output$downfig4.1.3 = downloadHandler(
+          filename = function() {
+            "4.1.3_check_mv_neg.pdf"
+          },
+          content = function(file) {
+            ggsave(plot = check_mv(object = p2_dataclean$object_neg,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot'),
+                   filename = file,
+                   width = downloads$width4.1.3,
+                   height = downloads$height4.1.3)
+          }
+        )
         data_clean_rv$object_neg <- p2_dataclean$object_neg
         data_clean_rv$object_pos <- p2_dataclean$object_pos
 

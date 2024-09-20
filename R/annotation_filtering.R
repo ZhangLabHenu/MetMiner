@@ -64,12 +64,12 @@ annotation_filter_ui <- function(id) {
                          choices = c("keep all","keep the first one"),
                          selected = "keep all"
                        ),
-                       radioButtons(
-                         inputId = ns("af_levels"),
-                         label = "Annotation level",
-                         choices = c("keep all","keep level 1 and 2 only"),
-                         selected = "keep all"
-                       ),
+                       # radioButtons(
+                       #   inputId = ns("af_levels"),
+                       #   label = "Annotation level",
+                       #   choices = c("keep all","keep level 1 and 2 only"),
+                       #   selected = "keep all"
+                       # ),
                        tags$h3("Parameters for MS/MS match plot",style = 'color: #008080'),
                        hr_main(),
                        radioButtons(
@@ -270,7 +270,7 @@ annotation_filter_server <- function(id,volumes,prj_init,data_clean_rv,data_down
         ##> parameters
         p2_af_filter$af_multi_anno = input$af_multi_anno %>% as.character()
         p2_af_filter$af_redundancy = input$af_redundancy
-        p2_af_filter$af_levels = input$af_levels
+        # p2_af_filter$af_levels = input$af_levels
         p2_af_filter$feature_remove = input$feature_remove
 
 
@@ -295,8 +295,7 @@ annotation_filter_server <- function(id,volumes,prj_init,data_clean_rv,data_down
                      Level == 1 | Level == 2 ~ "retain",
                      TRUE ~ "remove"
                    )
-          ) %>%
-          dplyr::filter(filter_tag_addcut == "retain")
+          )
         ##> neg
         p2_af_filter$object_neg_temp.af <-
           p2_af_filter$object_neg.anno %>%
@@ -307,8 +306,7 @@ annotation_filter_server <- function(id,volumes,prj_init,data_clean_rv,data_down
                      Level == 1 | Level == 2 ~ "retain",
                      TRUE ~ "remove"
                    )
-          ) %>%
-          dplyr::filter(filter_tag_addcut == "retain")
+          )
 
         ##> Annotation cleaning for multi-matched annotation
         if(p2_af_filter$af_multi_anno == "keep top total score") {
@@ -357,17 +355,17 @@ annotation_filter_server <- function(id,volumes,prj_init,data_clean_rv,data_down
             group_by(Compound.name.fix) %>%
             slice_head(n = 1)
         }
-        ##> Keep all or remove compounds only have MS1 annotation.
-        if(p2_af_filter$af_levels == "keep level 1 and 2 only") {
-          p2_af_filter$object_neg_temp.af =
-            p2_af_filter$object_neg_temp.af %>%
-            activate_mass_dataset("annotation_table") %>%
-            filter(Level == 1 | Level == 2)
-          p2_af_filter$object_pos_temp.af =
-            p2_af_filter$object_pos_temp.af %>%
-            activate_mass_dataset("annotation_table") %>%
-            filter(Level == 1 | Level == 2)
-        }
+        # ##> Keep all or remove compounds only have MS1 annotation.
+        # if(p2_af_filter$af_levels == "keep level 1 and 2 only") {
+        #   p2_af_filter$object_neg_temp.af =
+        #     p2_af_filter$object_neg_temp.af %>%
+        #     activate_mass_dataset("annotation_table") %>%
+        #     filter(Level == 1 | Level == 2)
+        #   p2_af_filter$object_pos_temp.af =
+        #     p2_af_filter$object_pos_temp.af %>%
+        #     activate_mass_dataset("annotation_table") %>%
+        #     filter(Level == 1 | Level == 2)
+        # }
         ##> plot
         p2_af_filter$pos_clean_anno =
           p2_af_filter$object_pos_temp.af %>%
@@ -476,16 +474,16 @@ annotation_filter_server <- function(id,volumes,prj_init,data_clean_rv,data_down
                    show_detail = input$show_detail
                    if(show_detail == "TRUE") {show_detail = TRUE} else {show_detail = FALSE}
 
-                   ##> 选取行后获得行的index
+                   ##> get index
                    af_pos_row_idx = input$af_pos_ms2_tbl_rows_selected
-                   ##> 表格中根据index提取信息
+                   ##> extract infor
                    af_pos_row = p2_af_filter$temp_af_pos_tbl[af_pos_row_idx,]
                    p2_af_filter$pos_vari_id = af_pos_row[[1]]
                    p2_af_filter$pos_db_name = af_pos_row[[4]]
 
                    temp_idx.pos = match(p2_af_filter$pos_db_name,p2_af_filter$db.name)
                    temp_db.pos = p2_af_filter$dblist[[temp_idx.pos]]
-                   ##> 画图
+                   ##> plot
 
                    p2_af_filter$temp_ms2_match.pos = ms2_plot_mass_dataset_mz(
                      object = p2_af_filter$object_pos_temp.af,
@@ -496,7 +494,7 @@ annotation_filter_server <- function(id,volumes,prj_init,data_clean_rv,data_down
                      show_detail = show_detail
                    )
 
-                   ##> 可视化
+                   ##> vis
 
                    #> mv plot original neg
                    output$pos_match_mz <- renderUI({
