@@ -1,4 +1,4 @@
-![](inst/app/www/webp/MetMiner.jpg)
+![](inst/app/www/MetMiner.jpg)
 
 [![R version](https://img.shields.io/badge/R-v4.3.3-salmon)](https://www.r-project.org) [![TBtools version](https://img.shields.io/badge/TBtools-%3Ev2.096-greenyellow)](https://www.yuque.com/cjchen/hirv8i/fzc4g9) ![lifecycle](https://img.shields.io/badge/lifecycle-Experimental-lightcyan) [![license](https://img.shields.io/badge/license-MIT-red)](https://opensource.org/licenses/MIT) [![Myblog](https://img.shields.io/badge/Blog-ShanwLearnBioinfo-purple)](https://shawnwx2019.github.io/)
 
