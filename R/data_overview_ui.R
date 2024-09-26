@@ -66,27 +66,27 @@ data_overview_ui <- function(id) {
               jqui_resizable(
                 uiOutput(ns("data_clean_batch_plt.pos"),fill = T)
               ),
-              textInput(inputId = ns("width4.1.1"),
+              textInput(inputId = ns("widthPart2.1.1"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("height4.1.1"),
+              textInput(inputId = ns("heightPart2.1.1"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjust4.1.1"),"Set fig size"),
-              downloadButton(ns("downfig4.1.1"),"Download"),
+              actionButton(ns("adjustPart2.1.1"),"Set fig size"),
+              downloadButton(ns("downfigPart2.1.1"),"Download"),
               tags$h3("Summary of missing values in all samples",style = 'color: #008080'),
               hr_main(),
               jqui_resizable(
                 uiOutput(ns("data_clean_mv_plt.pos"),fill = T)
               ),
-              textInput(inputId = ns("width4.1.2"),
+              textInput(inputId = ns("widthPart2.1.2"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("height4.1.2"),
+              textInput(inputId = ns("heightPart2.1.2"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjust4.1.2"),"Set fig size"),
-              downloadButton(ns("downfig4.1.2"),"Download"),
+              actionButton(ns("adjustPart2.1.2"),"Set fig size"),
+              downloadButton(ns("downfigPart2.1.2"),"Download"),
             ),
 
             tabPanel(
@@ -97,27 +97,27 @@ data_overview_ui <- function(id) {
               jqui_resizable(
                 uiOutput(ns("data_clean_batch_plt.neg"),fill = T)
               ),
-              textInput(inputId = ns("width4.1.3.1"),
+              textInput(inputId = ns("widthPart2.1.3"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("height4.1.3.1"),
+              textInput(inputId = ns("heightPart2.1.3"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjust4.1.3.1"),"Set fig size"),
-              downloadButton(ns("downfig4.1.3"),"Download"),
+              actionButton(ns("adjustPart2.1.3"),"Set fig size"),
+              downloadButton(ns("downfigPart2.1.3"),"Download"),
               tags$h3("Summary of missing values in all samples",style = 'color: #008080'),
               hr_main(),
               jqui_resizable(
                 uiOutput(ns("data_clean_mv_plt.neg"))
               ),
-              textInput(inputId = ns("width4.1.3"),
+              textInput(inputId = ns("widthPart2.1.4"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("height4.1.3"),
+              textInput(inputId = ns("heightPart2.1.4"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjust4.1.3"),"Set fig size"),
-              downloadButton(ns("downfig4.1.3"),"Download"),
+              actionButton(ns("adjustPart2.1.4"),"Set fig size"),
+              downloadButton(ns("downfigPart2.1.4"),"Download"),
             )
           )
         )
@@ -143,11 +143,11 @@ data_overview_ui <- function(id) {
 #' @param prj_init use project init variables.
 #' @param data_import_rv reactivevalues mass_dataset export
 #' @param data_clean_rv reactivevalues p2 dataclean
+#' @param downloads download module
 #' @noRd
 
 
-data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_rv,
-                                 downloads) {
+data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_rv,downloads) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     observeEvent(input$toggleSidebar, {
@@ -229,10 +229,7 @@ data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_r
           } else {
             plotOutput(outputId = ns("plot_checkbatch.pos"))
           }
-
         })
-
-
         output$plot_checkbatch.pos <- renderPlot({
           if(is.null(input$data_clean_start)){return()}
           if(is.null(p2_dataclean$object_pos)){return()}
@@ -246,25 +243,7 @@ data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_r
           QC_boxplot(object = p2_dataclean$object_pos,colby = p2_dataclean$color_key_batch,type = 'plotly')
         })
 
-        #> download pos
-        observeEvent(
-          input$adjust4.1.1,
-          {
-            downloads$width4.1.1 <- as.numeric(input$width4.1.1)
-            downloads$height4.1.1 <-  as.numeric(input$height4.1.1)
-          }
-        )
-        output$downfig4.1.1 = downloadHandler(
-          filename = function() {
-            "4.1.1_check_batch_pos.pdf"
-          },
-          content = function(file) {
-            ggsave(plot = QC_boxplot(object = p2_dataclean$object_pos,colby = p2_dataclean$color_key_batch,type = 'plot'),
-                   filename = file,
-                   width = downloads$width4.1.1,
-                   height = downloads$height4.1.1)
-          }
-        )
+
 
         #> plot.neg
         output$data_clean_batch_plt.neg <- renderUI({
@@ -289,25 +268,7 @@ data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_r
           QC_boxplot(object = p2_dataclean$object_neg,colby = p2_dataclean$color_key_batch,type = 'plotly')
         })
 
-        #> download neg
-        observeEvent(
-          input$adjust4.1.2,
-          {
-            downloads$width4.1.2 <- as.numeric(input$width4.1.2)
-            downloads$height4.1.2 <-  as.numeric(input$height4.1.2)
-          }
-        )
-        output$downfig4.1.2 = downloadHandler(
-          filename = function() {
-            "4.1.2_check_batch_neg.pdf"
-          },
-          content = function(file) {
-            ggsave(plot = QC_boxplot(object = p2_dataclean$object_neg,colby = p2_dataclean$color_key_batch,type = 'plot'),
-                   filename = file,
-                   width = downloads$width4.1.2,
-                   height = downloads$height4.1.2)
-          }
-        )
+
         ##> MV plots
         #> plot.pos
         output$data_clean_mv_plt.pos <- renderUI({
@@ -332,25 +293,7 @@ data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_r
           check_mv(object = p2_dataclean$object_pos,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot')
         })
 
-        #> download pos
-        observeEvent(
-          input$adjust4.1.3.1,
-          {
-            downloads$width4.1.3.1 <- as.numeric(input$width4.1.3.1)
-            downloads$height4.1.3.1 <-  as.numeric(input$height4.1.3.1)
-          }
-        )
-        output$downfig4.1.3.1 = downloadHandler(
-          filename = function() {
-            "4.1.3.1_check_mv_pos.pdf"
-          },
-          content = function(file) {
-            ggsave(plot = check_mv(object = p2_dataclean$object_pos,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot'),
-                   filename = file,
-                   width = downloads$width4.1.3.1,
-                   height = downloads$height4.1.3.1)
-          }
-        )
+
 
         #> plot.neg
         output$data_clean_mv_plt.neg <- renderUI({
@@ -374,32 +317,93 @@ data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_r
           if(is.null(p2_dataclean$object_neg)){return()}
           check_mv(object = p2_dataclean$object_neg,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plotly')
         })
-        #> download neg
+
+        data_clean_rv$object_neg <- p2_dataclean$object_neg
+        data_clean_rv$object_pos <- p2_dataclean$object_pos
+
+
+        # download ----------------------------------------------------------------
+        #> pos qc data
         observeEvent(
-          input$adjust4.1.3,
+          input$adjustPart2.1.1,
           {
-            downloads$width4.1.3 <- as.numeric(input$width4.1.3)
-            downloads$height4.1.3 <-  as.numeric(input$height4.1.3)
+            downloads$widthPart2.1.1 <- as.numeric(input$widthPart2.1.1)
+            downloads$heightPart2.1.1 <-  as.numeric(input$heightPart2.1.1)
           }
         )
-        output$downfig4.1.3 = downloadHandler(
+        output$downfigPart2.1.1 = downloadHandler(
           filename = function() {
-            "4.1.3_check_mv_neg.pdf"
+            "Part2.1.1_check_batch_pos.pdf"
+          },
+          content = function(file) {
+            ggsave(plot = QC_boxplot(object = p2_dataclean$object_pos,colby = p2_dataclean$color_key_batch,type = 'plot'),
+                   filename = file,
+                   width = downloads$widthPart2.1.1,
+                   height = downloads$heightPart2.1.1)
+          }
+        )
+
+        #> neg qc data
+        observeEvent(
+          input$adjustPart2.1.3,
+          {
+            downloads$widthPart2.1.3 <- as.numeric(input$widthPart2.1.3)
+            downloads$heightPart2.1.3 <-  as.numeric(input$heightPart2.1.3)
+          }
+        )
+        output$downfigPart2.1.3 = downloadHandler(
+          filename = function() {
+            "Part2.1.3_check_batch_neg.pdf"
+          },
+          content = function(file) {
+            ggsave(plot = QC_boxplot(object = p2_dataclean$object_neg,colby = p2_dataclean$color_key_batch,type = 'plot'),
+                   filename = file,
+                   width = downloads$widthPart2.1.3,
+                   height = downloads$heightPart2.1.3)
+          }
+        )
+
+        #> download pos
+        observeEvent(
+          input$adjustPart2.1.2,
+          {
+            downloads$widthPart2.1.2 <- as.numeric(input$widthPart2.1.2)
+            downloads$heightPart2.1.2 <-  as.numeric(input$heightPart2.1.2)
+          }
+        )
+        output$downfigPart2.1.2 = downloadHandler(
+          filename = function() {
+            "Part2.1.2_check_mv_pos.pdf"
+          },
+          content = function(file) {
+            ggsave(plot = check_mv(object = p2_dataclean$object_pos,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot'),
+                   filename = file,
+                   width = downloads$widthPart2.1.2,
+                   height = downloads$heightPart2.1.2)
+          }
+        )
+
+        observeEvent(
+          input$adjustPart2.1.4,
+          {
+            downloads$widthPart2.1.4 <- as.numeric(input$widthPart2.1.4)
+            downloads$heightPart2.1.4 <-  as.numeric(input$heightPart2.1.4)
+          }
+        )
+        output$downfigPart2.1.4 = downloadHandler(
+          filename = function() {
+            "Part2.1.4_check_mv_neg.pdf"
           },
           content = function(file) {
             ggsave(plot = check_mv(object = p2_dataclean$object_neg,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot'),
                    filename = file,
-                   width = downloads$width4.1.3,
-                   height = downloads$height4.1.3)
+                   width = downloads$widthPart2.1.4,
+                   height = downloads$heightPart2.1.4)
           }
         )
-        data_clean_rv$object_neg <- p2_dataclean$object_neg
-        data_clean_rv$object_pos <- p2_dataclean$object_pos
 
       }
     )
-
-
   })
 }
 
