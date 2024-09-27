@@ -431,14 +431,18 @@ data_merge_server <- function(id,volumes,prj_init,data_clean_rv) {
       data_clean_rv$object_merge = p2_data_merge$object_merge
       object_pos = p2_data_merge$object_pos.af
       object_neg = p2_data_merge$object_neg.af
+      temp_pos_mrm = object_pos %>% MDAtoolkits::oneStepMRMselection %>% extract_variable_info()
+      temp_neg_mrm = object_neg %>% MDAtoolkits::oneStepMRMselection %>% extract_variable_info()
+      mrm_selection = rbind(temp_pos_mrm,temp_neg_mrm)
 
       temp_datalist = list(
         sample_info = p2_data_merge$sample_info_full,
         variable_info = p2_data_merge$vari_info_full,
         annotation_table = p2_data_merge$anno_table,
-        expmat = p2_data_merge$expmat
+        expmat = p2_data_merge$expmat,
+        mrm_table = mrm_selection
       )
-      tags = c("mass_dataset.rda","table.xlsx","ms2_file.mgf")
+      tags = c("mass_dataset.rda","table.xlsx","ms2_file.mgf","MRM_selection.xlsx")
       merge_steps_tag = c(paste0("Save ",tags," in progress..."),"Finish!")
 
       merge_steps = length(merge_steps_tag)
