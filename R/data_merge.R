@@ -211,6 +211,8 @@ data_merge_server <- function(id,volumes,prj_init,data_clean_rv) {
           p2_data_merge$object_neg.af = data_clean_rv$object_neg.af
           p2_data_merge$object_pos.af = data_clean_rv$object_pos.af
         }
+        p2_data_merge$object_pos.mrm = p2_data_merge$object_pos.af
+        p2_data_merge$object_neg.mrm = p2_data_merge$object_neg.af
         p2_data_merge$object_neg.af =
           p2_data_merge$object_neg.af %>%
           activate_mass_dataset("sample_info") %>%
@@ -431,8 +433,55 @@ data_merge_server <- function(id,volumes,prj_init,data_clean_rv) {
       data_clean_rv$object_merge = p2_data_merge$object_merge
       object_pos = p2_data_merge$object_pos.af
       object_neg = p2_data_merge$object_neg.af
-      temp_pos_mrm = object_pos %>% MDAtoolkits::oneStepMRMselection %>% extract_variable_info()
-      temp_neg_mrm = object_neg %>% MDAtoolkits::oneStepMRMselection %>% extract_variable_info()
+      print('check point mrm')
+      temp_pos_mrm = p2_data_merge$object_pos.mrm %>%  MDAtoolkits::oneStepMRMselection() %>%
+        extract_variable_info() %>%
+        dplyr::select(variable_id,rt,precursor,product) %>%
+        dplyr::mutate(
+          Compound = variable_id,
+          `Retention Time (min)` = rt,
+          `RT Window (min)` = 1,
+          Polarity = "Positive",
+          `Precursor (m/z)` = precursor,
+          `Product (m/z)` = product
+        ) %>%
+        dplyr::filter(!is.na(precursor)) %>%
+        dplyr::mutate(
+          `Collision Energy (V)` = dplyr::case_when(
+            `Precursor (m/z)` < 200 ~ 15,
+            `Precursor (m/z)` >= 200 & `Precursor (m/z)` < 400 ~ 20,
+            `Precursor (m/z)` >= 400 & `Precursor (m/z)` < 600 ~ 25,
+            TRUE ~ 30
+          ),
+          `Min Dwell Time (ms)` = 1
+        ) %>%
+        dplyr::select(Compound,`Retention Time (min)`,`RT Window (min)`,Polarity,`Precursor (m/z)`,`Product (m/z)`,
+                      `Collision Energy (V)`,`Min Dwell Time (ms)`)
+      temp_neg_mrm =  p2_data_merge$object_neg.mrm %>% MDAtoolkits::oneStepMRMselection() %>%
+        extract_variable_info() %>%
+        dplyr::select(variable_id,rt,precursor,product) %>%
+        dplyr::mutate(
+          Compound = variable_id,
+          `Retention Time (min)` = rt,
+          `RT Window (min)` = 1,
+          Polarity = "Negative",
+          `Precursor (m/z)` = precursor,
+          `Product (m/z)` = product
+        ) %>%
+        dplyr::filter(!is.na(precursor)) %>%
+        dplyr::mutate(
+          `Collision Energy (V)` = dplyr::case_when(
+            `Precursor (m/z)` < 200 ~ 15,
+            `Precursor (m/z)` >= 200 & `Precursor (m/z)` < 400 ~ 20,
+            `Precursor (m/z)` >= 400 & `Precursor (m/z)` < 600 ~ 25,
+            TRUE ~ 30
+          ),
+          `Min Dwell Time (ms)` = 1
+        ) %>%
+        dplyr::select(Compound,`Retention Time (min)`,`RT Window (min)`,Polarity,`Precursor (m/z)`,`Product (m/z)`,
+                      `Collision Energy (V)`,`Min Dwell Time (ms)`)
+
+
       mrm_selection = rbind(temp_pos_mrm,temp_neg_mrm)
 
       temp_datalist = list(
