@@ -455,7 +455,7 @@ data_rm_outlier_server <- function(id,volumes,prj_init,data_clean_rv) {
       },
       content = function(file) {
         # extract parameters
-        para <- plot1_para()
+
         para_d <- download_para()
 
         # draw condition
@@ -478,7 +478,7 @@ data_rm_outlier_server <- function(id,volumes,prj_init,data_clean_rv) {
       },
       content = function(file) {
         # extract parameters
-        para <- plot2_para()
+
         para_d <- download_para()
 
         # draw condition
