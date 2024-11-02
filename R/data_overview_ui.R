@@ -359,105 +359,101 @@ data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_r
         data_clean_rv$object_neg <- p2_dataclean$object_neg
         data_clean_rv$object_pos <- p2_dataclean$object_pos
 
-
-        # download ----------------------------------------------------------------
-        ###> fig1 =====
-        output$fig1_download = downloadHandler(
-          filename = function() {
-            paste0("01.boxplot-pos.", download_para()$fig1_format)
-          },
-          content = function(file) {
-            # extract parameters
-            para <- plot1_para()
-            para_d <- download_para()
-
-            # draw condition
-            p = QC_boxplot(object = p2_dataclean$object_pos,colby = p2_dataclean$color_key_batch,type = 'plot')
-
-            # save plot
-            ggsave(
-              filename = file,
-              plot = p,
-              width = para_d$fig1_width,
-              height = para_d$fig1_height,
-              device = para_d$fig1_format
-            )
-          }
-        )
-        ###> fig2 ====
-        output$fig2_download = downloadHandler(
-          filename = function() {
-            paste0("02.mv_plot-pos.", download_para()$fig2_format)
-          },
-          content = function(file) {
-            # extract parameters
-            para <- plot2_para()
-            para_d <- download_para()
-
-            # draw condition
-            p = check_mv(object = p2_dataclean$object_pos,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot')
-
-            # save plot
-
-            ggsave(
-              filename = file,
-              plot = p,
-              width = para_d$fig2_width,
-              height = para_d$fig2_height,
-              device = para_d$fig2_format
-            )
-          }
-        )
-        ###> fig3 =====
-        output$fig3_download = downloadHandler(
-          filename = function() {
-            paste0("01.boxplot-neg.", download_para()$fig3_format)
-          },
-          content = function(file) {
-            # extract parameters
-            para <- plot3_para()
-            para_d <- download_para()
-
-            # draw condition
-            p = QC_boxplot(object = p2_dataclean$object_neg,colby = p2_dataclean$color_key_batch,type = 'plot')
-
-            # save plot
-            ggsave(
-              filename = file,
-              plot = p,
-              width = para_d$fig3_width,
-              height = para_d$fig3_height,
-              device = para_d$fig3_format
-            )
-          }
-        )
-        ###> fig4 ====
-        output$fig4_download = downloadHandler(
-          filename = function() {
-            paste0("02.mv_plot-neg.", download_para()$fig4_format)
-          },
-          content = function(file) {
-            # extract parameters
-            para <- plot4_para()
-            para_d <- download_para()
-
-            # draw condition
-            p = check_mv(object = p2_dataclean$object_neg,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot')
-
-            # save plot
-
-            ggsave(
-              filename = file,
-              plot = p,
-              width = para_d$fig4_width,
-              height = para_d$fig4_height,
-              device = para_d$fig4_format
-            )
-          }
-        )
-
       }
     )
+
+
+    # download ----------------------------------------------------------------
+    ###> fig1 =====
+    output$fig1_download = downloadHandler(
+      filename = function() {
+        paste0("01.boxplot-pos.", download_para()$fig1_format)
+      },
+      content = function(file) {
+        # extract parameters
+        para_d <- download_para()
+        # draw condition
+        p = QC_boxplot(object = p2_dataclean$object_pos,colby = p2_dataclean$color_key_batch,type = 'plot')
+
+        # save plot
+        ggsave(
+          filename = file,
+          plot = p,
+          width = para_d$fig1_width,
+          height = para_d$fig1_height,
+          device = para_d$fig1_format
+        )
+      }
+    )
+    ###> fig2 ====
+    output$fig2_download = downloadHandler(
+      filename = function() {
+        paste0("02.mv_plot-pos.", download_para()$fig2_format)
+      },
+      content = function(file) {
+        # extract parameters
+        para_d <- download_para()
+
+        # draw condition
+        p = check_mv(object = p2_dataclean$object_pos,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot')
+
+        # save plot
+
+        ggsave(
+          filename = file,
+          plot = p,
+          width = para_d$fig2_width,
+          height = para_d$fig2_height,
+          device = para_d$fig2_format
+        )
+      }
+    )
+    ###> fig3 =====
+    output$fig3_download = downloadHandler(
+      filename = function() {
+        paste0("01.boxplot-neg.", download_para()$fig3_format)
+      },
+      content = function(file) {
+        # extract parameters
+        para_d <- download_para()
+
+        # draw condition
+        p = QC_boxplot(object = p2_dataclean$object_neg,colby = p2_dataclean$color_key_batch,type = 'plot')
+
+        # save plot
+        ggsave(
+          filename = file,
+          plot = p,
+          width = para_d$fig3_width,
+          height = para_d$fig3_height,
+          device = para_d$fig3_format
+        )
+      }
+    )
+    ###> fig4 ====
+    output$fig4_download = downloadHandler(
+      filename = function() {
+        paste0("02.mv_plot-neg.", download_para()$fig4_format)
+      },
+      content = function(file) {
+        # extract parameters
+        para_d <- download_para()
+
+        # draw condition
+        p = check_mv(object = p2_dataclean$object_neg,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot')
+
+        # save plot
+
+        ggsave(
+          filename = file,
+          plot = p,
+          width = para_d$fig4_width,
+          height = para_d$fig4_height,
+          device = para_d$fig4_format
+        )
+      }
+    )
+
   })
 }
 

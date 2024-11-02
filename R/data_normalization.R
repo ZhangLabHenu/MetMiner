@@ -569,6 +569,145 @@ data_normalize_server <- function(id,volumes,prj_init,data_clean_rv) {
       }
     )
 
+
+
+    # download ----------------------------------------------------------------
+    ###> fig1 =====
+    output$fig1_download = downloadHandler(
+      filename = function() {
+        paste0("01.pca_normalization-pos.", download_para()$fig1_format)
+      },
+      content = function(file) {
+        # extract parameters
+        para_d <- download_para()
+
+        # draw condition
+        p = pca_plot(object = p2_norm$object_pos.norm,colby = p2_norm$temp_norm_pca_col_by,center = T,scale = T,removeVar = .1,interactive = F)
+
+        # save plot
+        ggsave(
+          filename = file,
+          plot = p,
+          width = para_d$fig1_width,
+          height = para_d$fig1_height,
+          device = para_d$fig1_format
+        )
+      }
+    )
+    ###> fig2 ====
+    output$fig2_download = downloadHandler(
+      filename = function() {
+        paste0("02.pca_raw-pos.", download_para()$fig2_format)
+      },
+      content = function(file) {
+        # extract parameters
+        para_d <- download_para()
+
+        # draw condition
+        p = pca_plot(object = p2_norm$object_pos.impute,colby = p2_norm$temp_norm_pca_col_by,center = T,scale = T,removeVar = .1,interactive = F)
+
+        # save plot
+
+        ggsave(
+          filename = file,
+          plot = p,
+          width = para_d$fig2_width,
+          height = para_d$fig2_height,
+          device = para_d$fig2_format
+        )
+      }
+    )
+    ###> fig3 =====
+    output$fig3_download = downloadHandler(
+      filename = function() {
+        paste0("03.rsd_plot-pos.", download_para()$fig3_format)
+      },
+      content = function(file) {
+        # extract parameters
+        para_d <- download_para()
+
+        # draw condition
+        p = p2_norm$pos.plt
+
+        # save plot
+        ggsave(
+          filename = file,
+          plot = p,
+          width = para_d$fig3_width,
+          height = para_d$fig3_height,
+          device = para_d$fig3_format
+        )
+      }
+    )
+    ###> fig4 ====
+    output$fig4_download = downloadHandler(
+      filename = function() {
+        paste0("01.pca_normalization-neg.", download_para()$fig4_format)
+      },
+      content = function(file) {
+        # extract parameters
+        para_d <- download_para()
+
+        # draw condition
+        p = pca_plot(object = p2_norm$object_neg.norm,colby = p2_norm$temp_norm_pca_col_by,center = T,scale = T,removeVar = .1,interactive = F)
+
+        # save plot
+        ggsave(
+          filename = file,
+          plot = p,
+          width = para_d$fig4_width,
+          height = para_d$fig4_height,
+          device = para_d$fig4_format
+        )
+      }
+    )
+    ###> fig5 ====
+    output$fig5_download = downloadHandler(
+      filename = function() {
+        paste0("02.pca_raw-neg.", download_para()$fig5_format)
+      },
+      content = function(file) {
+        # extract parameters
+        para_d <- download_para()
+
+        # draw condition
+        p = pca_plot(object = p2_norm$object_neg.impute,colby = p2_norm$temp_norm_pca_col_by,center = T,scale = T,removeVar = .1,interactive = F)
+
+        # save plot
+
+        ggsave(
+          filename = file,
+          plot = p,
+          width = para_d$fig5_width,
+          height = para_d$fig5_height,
+          device = para_d$fig5_format
+        )
+      }
+    )
+    ###> fig6 =====
+    output$fig6_download = downloadHandler(
+      filename = function() {
+        paste0("03.rsd_plot-neg.", download_para()$fig6_format)
+      },
+      content = function(file) {
+        # extract parameters
+        para_d <- download_para()
+
+        # draw condition
+        p = p2_norm$neg.plt
+
+        # save plot
+        ggsave(
+          filename = file,
+          plot = p,
+          width = para_d$fig6_width,
+          height = para_d$fig6_height,
+          device = para_d$fig6_format
+        )
+      }
+    )
+
+
   })
 }
 
