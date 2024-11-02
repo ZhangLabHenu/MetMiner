@@ -97,40 +97,52 @@ data_normalize_ui <- function(id) {
               jqui_resizable(
                 uiOutput(ns("pca.pos_plt"),fill = T)
               ),
-              textInput(inputId = ns("width4.5.1"),
+              textInput(inputId = ns("fig1_width"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("height4.5.1"),
+              textInput(inputId = ns("fig1_height"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjust4.5.1"),"Set fig size"),
-              downloadButton(ns("downfig4.5.1"),"Download"),
+              selectInput(
+                inputId = ns("fig1_format"),label = "format",
+                choices = c("jpg","pdf","png","tiff"),
+                selected = "pdf",selectize = F
+              ),
+              downloadButton(ns("fig1_download"),"Download"),
               tags$h3("PCA raw",style = 'color: #008080'),
               hr_main(),
               jqui_resizable(
                 uiOutput(ns("pca.pos_plt_raw"),fill = T)
               ),
-              textInput(inputId = ns("width4.5.2"),
-                        label = "width",
-                        value = 10),
-              textInput(inputId = ns("height4.5.2"),
+              textInput(inputId = ns("fig2_width"),
+                                        label = "width",
+                                        value = 10),
+              textInput(inputId = ns("fig2_height"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjust4.5.2"),"Set fig size"),
-              downloadButton(ns("downfig4.5.2"),"Download"),
+              selectInput(
+                inputId = ns("fig2_format"),label = "format",
+                choices = c("jpg","pdf","png","tiff"),
+                selected = "pdf",selectize = F
+              ),
+              downloadButton(ns("fig2_download"),"Download"),
               tags$h3("RSD",style = 'color: #008080'),
               hr_main(),
               jqui_resizable(
                 uiOutput(ns("rsd.pos_plt"))
               ),
-              textInput(inputId = ns("width4.5.3"),
+              textInput(inputId = ns("fig3_width"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("height4.5.3"),
+              textInput(inputId = ns("fig3_height"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjust4.5.3"),"Set fig size"),
-              downloadButton(ns("downfig4.5.3"),"Download"),
+              selectInput(
+                inputId = ns("fig3_format"),label = "format",
+                choices = c("jpg","pdf","png","tiff"),
+                selected = "pdf",selectize = F
+              ),
+              downloadButton(ns("fig3_download"),"Download"),
               tags$h3("Status",style = 'color: #008080'),
               hr_main(),
               verbatimTextOutput(ns("object_pos.norm"))
@@ -147,41 +159,53 @@ data_normalize_ui <- function(id) {
                 uiOutput(ns("pca.neg_plt"),fill = T)
               ),
 
-              textInput(inputId = ns("width4.5.4"),
+              textInput(inputId = ns("fig4_width"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("height4.5.4"),
+              textInput(inputId = ns("fig4_height"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjust4.5.4"),"Set fig size"),
-              downloadButton(ns("downfig4.5.4"),"Download"),
+              selectInput(
+                inputId = ns("fig4_format"),label = "format",
+                choices = c("jpg","pdf","png","tiff"),
+                selected = "pdf",selectize = F
+              ),
+              downloadButton(ns("fig4_download"),"Download"),
               tags$h3("PCA raw",style = 'color: #008080'),
               hr_main(),
               jqui_resizable(
                 uiOutput(ns("pca.neg_plt_raw"),fill = T)
               ),
 
-              textInput(inputId = ns("width4.5.5"),
+              textInput(inputId = ns("fig5_width"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("height4.5.5"),
+              textInput(inputId = ns("fig5_height"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjust4.5.5"),"Set fig size"),
-              downloadButton(ns("downfig4.5.5"),"Download"),
+              selectInput(
+                inputId = ns("fig5_format"),label = "format",
+                choices = c("jpg","pdf","png","tiff"),
+                selected = "pdf",selectize = F
+              ),
+              downloadButton(ns("fig5_download"),"Download"),
               tags$h3("RSD",style = 'color: #008080'),
               hr_main(),
               jqui_resizable(
                 uiOutput(ns("rsd.neg_plt"),fill = T)
               ),
-              textInput(inputId = ns("width4.5.6"),
+              textInput(inputId = ns("fig6_width"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("height4.5.6"),
+              textInput(inputId = ns("fig6_height"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjust4.5.6"),"Set fig size"),
-              downloadButton(ns("downfig4.5.6"),"Download"),
+              selectInput(
+                inputId = ns("fig6_format"),label = "format",
+                choices = c("jpg","pdf","png","tiff"),
+                selected = "pdf",selectize = F
+              ),
+              downloadButton(ns("fig6_download"),"Download"),
               tags$h3("Status",style = 'color: #008080'),
               hr_main(),
               verbatimTextOutput(ns("object_neg.norm"))
@@ -223,6 +247,38 @@ data_normalize_server <- function(id,volumes,prj_init,data_clean_rv) {
     })
 
     p2_norm <- reactiveValues(data = NULL)
+
+
+    #> parameters
+    ##> download parameters ================
+    download_para = reactive({
+      list(
+        ##> fig1
+        fig1_width = as.numeric(input$fig1_width),
+        fig1_height = as.numeric(input$fig1_height),
+        fig1_format = as.character(input$fig1_format),
+        ##> fig2
+        fig2_width = as.numeric(input$fig2_width),
+        fig2_height = as.numeric(input$fig2_height),
+        fig2_format = as.character(input$fig2_format),
+        ##> fig3
+        fig3_width = as.numeric(input$fig3_width),
+        fig3_height = as.numeric(input$fig3_height),
+        fig3_format = as.character(input$fig3_format),
+        ##> fig4
+        fig4_width = as.numeric(input$fig4_width),
+        fig4_height = as.numeric(input$fig4_height),
+        fig4_format = as.character(input$fig4_format),
+        ##> fig5
+        fig5_width = as.numeric(input$fig5_width),
+        fig5_height = as.numeric(input$fig5_height),
+        fig5_format = as.character(input$fig5_format),
+        ##> fig6
+        fig6_width = as.numeric(input$fig6_width),
+        fig6_height = as.numeric(input$fig6_height),
+        fig6_format = as.character(input$fig6_format)
+      )
+    })
 
     observe({
       updateSelectInput(session, "pca_col_by",choices = colnames(prj_init$sample_info),selected = colnames(prj_init$sample_info)[3])
@@ -512,6 +568,7 @@ data_normalize_server <- function(id,volumes,prj_init,data_clean_rv) {
         })
       }
     )
+
   })
 }
 
