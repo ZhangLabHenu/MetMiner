@@ -84,14 +84,18 @@ data_rm_outlier_ui <- function(id) {
               jqui_resizable(
                 uiOutput(ns("outlier.pos_plt"),fill = T)
               ),
-              textInput(inputId = ns("width4.3.1"),
+              textInput(inputId = ns("fig1_width"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("height4.3.1"),
+              textInput(inputId = ns("fig1_height"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjust4.3.1"),"Set fig size"),
-              downloadButton(ns("downfig4.3.1"),"Download"),
+              selectInput(
+                inputId = ns("fig1_format"),label = "format",
+                choices = c("jpg","pdf","png","tiff"),
+                selected = "pdf",selectize = F
+              ),
+              downloadButton(ns("fig1_download"),"Download"),
               tags$h3("Pick outliers",style = 'color: #008080'),
               hr_main(),
               selectInput(inputId = ns('out_vari_pos'),label = "Select sample_id",choices = "none",selected = "none",multiple = T),
@@ -111,14 +115,18 @@ data_rm_outlier_ui <- function(id) {
               jqui_resizable(
                 uiOutput(ns("outlier.neg_plt"),fill = T)
               ),
-              textInput(inputId = ns("width4.3.2"),
+              textInput(inputId = ns("fig2_width"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("height4.3.2"),
+              textInput(inputId = ns("fig2_height"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjust4.3.2"),"Set fig size"),
-              downloadButton(ns("downfig4.3.2"),"Download"),
+              selectInput(
+                inputId = ns("fig2_format"),label = "format",
+                choices = c("jpg","pdf","png","tiff"),
+                selected = "pdf",selectize = F
+              ),
+              downloadButton(ns("fig2_download"),"Download"),
               tags$h3("Pick outliers",style = 'color: #008080'),
               hr_main(),
               selectInput(inputId = ns('out_vari_neg'),label = "Select sample_id",choices = "none",selected = "none",multiple = T),
@@ -171,6 +179,21 @@ data_rm_outlier_server <- function(id,volumes,prj_init,data_clean_rv) {
       updateSelectInput(session, "outlier_order_by",choices = colnames(prj_init$sample_info),selected = colnames(prj_init$sample_info)[2])
     })
 
+    #> parameters
+    ##> download parameters ================
+    download_para = reactive({
+      list(
+        ##> fig1
+        fig1_width = as.numeric(input$fig1_width),
+        fig1_height = as.numeric(input$fig1_height),
+        fig1_format = as.character(input$fig1_format),
+        ##> fig2
+        fig2_width = as.numeric(input$fig2_width),
+        fig2_height = as.numeric(input$fig2_height),
+        fig2_format = as.character(input$fig2_format)
+      )
+    })
+
     observeEvent(
       input$outlier_start,
       {
@@ -190,8 +213,6 @@ data_rm_outlier_server <- function(id,volumes,prj_init,data_clean_rv) {
           p2_mv_outlier$object_neg.mv = data_clean_rv$object_neg.mv
           p2_mv_outlier$object_pos.mv = data_clean_rv$object_pos.mv
         }
-
-
 
         p2_mv_outlier$colby = input$outlier_color_by %>% as.character()
         p2_mv_outlier$orderby = input$outlier_order_by %>% as.character()
@@ -305,8 +326,6 @@ data_rm_outlier_server <- function(id,volumes,prj_init,data_clean_rv) {
           if(is.null(p2_mv_outlier$plt_mv_ori.neg)){return()}
           plotly::ggplotly(p2_mv_outlier$plt_mv_ori.neg)
         })
-
-
       }
     )
 
@@ -314,7 +333,6 @@ data_rm_outlier_server <- function(id,volumes,prj_init,data_clean_rv) {
       updateSelectInput(session, "out_vari_pos",choices = p2_mv_outlier$s_id.pos,selected = p2_mv_outlier$s_id.pos[1])
       updateSelectInput(session, "out_vari_neg",choices = p2_mv_outlier$s_id.neg,selected = p2_mv_outlier$s_id.neg[1])
     })
-
 
     observeEvent(
       input$rm_outliers,
@@ -426,6 +444,55 @@ data_rm_outlier_server <- function(id,volumes,prj_init,data_clean_rv) {
         })
         data_clean_rv$object_pos.outlier <- p2_mv_outlier$object_pos.outlier
         data_clean_rv$object_neg.outlier <- p2_mv_outlier$object_neg.outlier
+      }
+    )
+
+    # download ----------------------------------------------------------------
+    ###> fig1 =====
+    output$fig1_download = downloadHandler(
+      filename = function() {
+        paste0("01.mv_remove_outliers-pos.", download_para()$fig1_format)
+      },
+      content = function(file) {
+        # extract parameters
+        para <- plot1_para()
+        para_d <- download_para()
+
+        # draw condition
+        p = p2_mv_outlier$plt_mv_ori.pos
+
+        # save plot
+        ggsave(
+          filename = file,
+          plot = p,
+          width = para_d$fig1_width,
+          height = para_d$fig1_height,
+          device = para_d$fig1_format
+        )
+      }
+    )
+    ###> fig2 ====
+    output$fig2_download = downloadHandler(
+      filename = function() {
+        paste0("01.mv_remove_outliers-neg.", download_para()$fig2_format)
+      },
+      content = function(file) {
+        # extract parameters
+        para <- plot2_para()
+        para_d <- download_para()
+
+        # draw condition
+        p = p2_mv_outlier$plt_mv_ori.neg
+
+        # save plot
+
+        ggsave(
+          filename = file,
+          plot = p,
+          width = para_d$fig2_width,
+          height = para_d$fig2_height,
+          device = para_d$fig2_format
+        )
       }
     )
   })

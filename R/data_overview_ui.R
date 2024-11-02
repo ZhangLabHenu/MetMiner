@@ -66,29 +66,36 @@ data_overview_ui <- function(id) {
               jqui_resizable(
                 uiOutput(ns("data_clean_batch_plt.pos"),fill = T)
               ),
-              textInput(inputId = ns("widthPart2.1.1"),
+              textInput(inputId = ns("fig1_width"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("heightPart2.1.1"),
+              textInput(inputId = ns("fig1_height"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjustPart2.1.1"),"Set fig size"),
-              downloadButton(ns("downfigPart2.1.1"),"Download"),
+              selectInput(
+                inputId = ns("fig1_format"),label = "format",
+                choices = c("jpg","pdf","png","tiff"),
+                selected = "pdf",selectize = F
+              ),
+              downloadButton(ns("fig1_download"),"Download"),
               tags$h3("Summary of missing values in all samples",style = 'color: #008080'),
               hr_main(),
               jqui_resizable(
                 uiOutput(ns("data_clean_mv_plt.pos"),fill = T)
               ),
-              textInput(inputId = ns("widthPart2.1.2"),
+              textInput(inputId = ns("fig2_width"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("heightPart2.1.2"),
+              textInput(inputId = ns("fig2_height"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjustPart2.1.2"),"Set fig size"),
-              downloadButton(ns("downfigPart2.1.2"),"Download"),
+              selectInput(
+                inputId = ns("fig2_format"),label = "format",
+                choices = c("jpg","pdf","png","tiff"),
+                selected = "pdf",selectize = F
+              ),
+              downloadButton(ns("fig2_download"),"Download"),
             ),
-
             tabPanel(
               title = 'Negative',height = '500px',width = "100%",
               icon = icon('minus'),
@@ -97,27 +104,35 @@ data_overview_ui <- function(id) {
               jqui_resizable(
                 uiOutput(ns("data_clean_batch_plt.neg"),fill = T)
               ),
-              textInput(inputId = ns("widthPart2.1.3"),
+              textInput(inputId = ns("fig3_width"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("heightPart2.1.3"),
+              textInput(inputId = ns("fig3_height"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjustPart2.1.3"),"Set fig size"),
-              downloadButton(ns("downfigPart2.1.3"),"Download"),
+              selectInput(
+                inputId = ns("fig3_format"),label = "format",
+                choices = c("jpg","pdf","png","tiff"),
+                selected = "pdf",selectize = F
+              ),
+              downloadButton(ns("fig3_download"),"Download"),
               tags$h3("Summary of missing values in all samples",style = 'color: #008080'),
               hr_main(),
               jqui_resizable(
                 uiOutput(ns("data_clean_mv_plt.neg"))
               ),
-              textInput(inputId = ns("widthPart2.1.4"),
+              textInput(inputId = ns("fig4_width"),
                         label = "width",
                         value = 10),
-              textInput(inputId = ns("heightPart2.1.4"),
+              textInput(inputId = ns("fig4_height"),
                         label = "height",
                         value = 10),
-              actionButton(ns("adjustPart2.1.4"),"Set fig size"),
-              downloadButton(ns("downfigPart2.1.4"),"Download"),
+              selectInput(
+                inputId = ns("fig4_format"),label = "format",
+                choices = c("jpg","pdf","png","tiff"),
+                selected = "pdf",selectize = F
+              ),
+              downloadButton(ns("fig4_download"),"Download")
             )
           )
         )
@@ -153,6 +168,29 @@ data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_r
     observeEvent(input$toggleSidebar, {
       shinyjs::toggle(id = "Sidebar")
     })
+    #> parameters
+    ##> download parameters ================
+    download_para = reactive({
+      list(
+        ##> fig1
+        fig1_width = as.numeric(input$fig1_width),
+        fig1_height = as.numeric(input$fig1_height),
+        fig1_format = as.character(input$fig1_format),
+        ##> fig2
+        fig2_width = as.numeric(input$fig2_width),
+        fig2_height = as.numeric(input$fig2_height),
+        fig2_format = as.character(input$fig2_format),
+        ##> fig3
+        fig3_width = as.numeric(input$fig3_width),
+        fig3_height = as.numeric(input$fig3_height),
+        fig3_format = as.character(input$fig3_format),
+        ##> fig4
+        fig4_width = as.numeric(input$fig4_width),
+        fig4_height = as.numeric(input$fig4_height),
+        fig4_format = as.character(input$fig4_format)
+      )
+    })
+
     #> reupload sample info
     update_sample_info <- reactive({
       file1 <- input$re_upload_sample_info
@@ -323,82 +361,98 @@ data_overview_server <- function(id,volumes,prj_init,data_import_rv,data_clean_r
 
 
         # download ----------------------------------------------------------------
-        #> pos qc data
-        observeEvent(
-          input$adjustPart2.1.1,
-          {
-            downloads$widthPart2.1.1 <- as.numeric(input$widthPart2.1.1)
-            downloads$heightPart2.1.1 <-  as.numeric(input$heightPart2.1.1)
-          }
-        )
-        output$downfigPart2.1.1 = downloadHandler(
+        ###> fig1 =====
+        output$fig1_download = downloadHandler(
           filename = function() {
-            "Part2.1.1_check_batch_pos.pdf"
+            paste0("01.boxplot-pos.", download_para()$fig1_format)
           },
           content = function(file) {
-            ggsave(plot = QC_boxplot(object = p2_dataclean$object_pos,colby = p2_dataclean$color_key_batch,type = 'plot'),
-                   filename = file,
-                   width = downloads$widthPart2.1.1,
-                   height = downloads$heightPart2.1.1)
-          }
-        )
+            # extract parameters
+            para <- plot1_para()
+            para_d <- download_para()
 
-        #> neg qc data
-        observeEvent(
-          input$adjustPart2.1.3,
-          {
-            downloads$widthPart2.1.3 <- as.numeric(input$widthPart2.1.3)
-            downloads$heightPart2.1.3 <-  as.numeric(input$heightPart2.1.3)
-          }
-        )
-        output$downfigPart2.1.3 = downloadHandler(
-          filename = function() {
-            "Part2.1.3_check_batch_neg.pdf"
-          },
-          content = function(file) {
-            ggsave(plot = QC_boxplot(object = p2_dataclean$object_neg,colby = p2_dataclean$color_key_batch,type = 'plot'),
-                   filename = file,
-                   width = downloads$widthPart2.1.3,
-                   height = downloads$heightPart2.1.3)
-          }
-        )
+            # draw condition
+            p = QC_boxplot(object = p2_dataclean$object_pos,colby = p2_dataclean$color_key_batch,type = 'plot')
 
-        #> download pos
-        observeEvent(
-          input$adjustPart2.1.2,
-          {
-            downloads$widthPart2.1.2 <- as.numeric(input$widthPart2.1.2)
-            downloads$heightPart2.1.2 <-  as.numeric(input$heightPart2.1.2)
+            # save plot
+            ggsave(
+              filename = file,
+              plot = p,
+              width = para_d$fig1_width,
+              height = para_d$fig1_height,
+              device = para_d$fig1_format
+            )
           }
         )
-        output$downfigPart2.1.2 = downloadHandler(
+        ###> fig2 ====
+        output$fig2_download = downloadHandler(
           filename = function() {
-            "Part2.1.2_check_mv_pos.pdf"
+            paste0("02.mv_plot-pos.", download_para()$fig2_format)
           },
           content = function(file) {
-            ggsave(plot = check_mv(object = p2_dataclean$object_pos,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot'),
-                   filename = file,
-                   width = downloads$widthPart2.1.2,
-                   height = downloads$heightPart2.1.2)
-          }
-        )
+            # extract parameters
+            para <- plot2_para()
+            para_d <- download_para()
 
-        observeEvent(
-          input$adjustPart2.1.4,
-          {
-            downloads$widthPart2.1.4 <- as.numeric(input$widthPart2.1.4)
-            downloads$heightPart2.1.4 <-  as.numeric(input$heightPart2.1.4)
+            # draw condition
+            p = check_mv(object = p2_dataclean$object_pos,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot')
+
+            # save plot
+
+            ggsave(
+              filename = file,
+              plot = p,
+              width = para_d$fig2_width,
+              height = para_d$fig2_height,
+              device = para_d$fig2_format
+            )
           }
         )
-        output$downfigPart2.1.4 = downloadHandler(
+        ###> fig3 =====
+        output$fig3_download = downloadHandler(
           filename = function() {
-            "Part2.1.4_check_mv_neg.pdf"
+            paste0("01.boxplot-neg.", download_para()$fig3_format)
           },
           content = function(file) {
-            ggsave(plot = check_mv(object = p2_dataclean$object_neg,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot'),
-                   filename = file,
-                   width = downloads$widthPart2.1.4,
-                   height = downloads$heightPart2.1.4)
+            # extract parameters
+            para <- plot3_para()
+            para_d <- download_para()
+
+            # draw condition
+            p = QC_boxplot(object = p2_dataclean$object_neg,colby = p2_dataclean$color_key_batch,type = 'plot')
+
+            # save plot
+            ggsave(
+              filename = file,
+              plot = p,
+              width = para_d$fig3_width,
+              height = para_d$fig3_height,
+              device = para_d$fig3_format
+            )
+          }
+        )
+        ###> fig4 ====
+        output$fig4_download = downloadHandler(
+          filename = function() {
+            paste0("02.mv_plot-neg.", download_para()$fig4_format)
+          },
+          content = function(file) {
+            # extract parameters
+            para <- plot4_para()
+            para_d <- download_para()
+
+            # draw condition
+            p = check_mv(object = p2_dataclean$object_neg,colby = p2_dataclean$colby,orderby = p2_dataclean$orderby,type = 'plot')
+
+            # save plot
+
+            ggsave(
+              filename = file,
+              plot = p,
+              width = para_d$fig4_width,
+              height = para_d$fig4_height,
+              device = para_d$fig4_format
+            )
           }
         )
 
